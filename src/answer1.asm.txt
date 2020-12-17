@@ -1,0 +1,85 @@
+// Answer 1
+<alloc::string::String as playground::AppendBar>::append_bar:
+	pushq	%r15
+	pushq	%r14
+	pushq	%r12
+	pushq	%rbx
+	subq	$24, %rsp
+	movq	%rdi, %r15
+	movups	(%rsi), %xmm0
+	movaps	%xmm0, (%rsp)
+	movq	16(%rsi), %rbx
+	movq	%rbx, 16(%rsp)
+	movq	8(%rsp), %rsi
+	movq	%rsi, %rax
+	subq	%rbx, %rax
+	cmpq	$3, %rax
+	jae	.LBB6_1
+	movq	%rbx, %r12
+	addq	$3, %r12
+	jb	.LBB6_10
+	leaq	(%rsi,%rsi), %rax
+	cmpq	%r12, %rax
+	cmovbeq	%r12, %rax
+	cmpq	$8, %rax
+	movl	$8, %r14d
+	cmovaq	%rax, %r14
+	testq	%rsi, %rsi
+	je	.LBB6_6
+	movq	(%rsp), %rdi
+	testq	%rdi, %rdi
+	je	.LBB6_6
+	movl	$1, %edx
+	movq	%r14, %rcx
+	callq	*__rust_realloc@GOTPCREL(%rip)
+	jmp	.LBB6_8
+
+.LBB6_1:
+	movq	(%rsp), %rax
+	leaq	3(%rbx), %r12
+	jmp	.LBB6_2
+
+.LBB6_6:
+	movl	$1, %esi
+	movq	%r14, %rdi
+	callq	*__rust_alloc@GOTPCREL(%rip)
+
+.LBB6_8:
+	testq	%rax, %rax
+	je	.LBB6_12
+	movq	%rax, (%rsp)
+	movq	%r14, 8(%rsp)
+
+.LBB6_2:
+	movb	.L__unnamed_2+2(%rip), %cl
+	movb	%cl, 2(%rax,%rbx)
+	movzwl	.L__unnamed_2(%rip), %ecx
+	movw	%cx, (%rax,%rbx)
+	movq	%r12, 16(%rsp)
+	movq	%r12, 16(%r15)
+	movq	(%rsp), %rax
+	movq	%rax, (%r15)
+	movq	8(%rsp), %rax
+	movq	%rax, 8(%r15)
+	addq	$24, %rsp
+	popq	%rbx
+	popq	%r12
+	popq	%r14
+	popq	%r15
+	retq
+
+.LBB6_10:
+	callq	*alloc::raw_vec::capacity_overflow@GOTPCREL(%rip)
+	ud2
+
+.LBB6_12:
+	movl	$1, %esi
+	movq	%r14, %rdi
+	callq	*alloc::alloc::handle_alloc_error@GOTPCREL(%rip)
+	ud2
+	movq	%rax, %rbx
+	movq	%rsp, %rdi
+	callq	core::ptr::drop_in_place
+	movq	%rbx, %rdi
+	callq	_Unwind_Resume@PLT
+	ud2

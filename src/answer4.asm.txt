@@ -1,0 +1,124 @@
+<alloc::string::String as playground::AppendBar>::append_bar: # @"<alloc::string::String as playground::AppendBar>::append_bar"
+# %bb.0:
+	pushq	%r15
+	pushq	%r14
+	pushq	%rbx
+	subq	$32, %rsp
+	movq	%rsi, %r15
+	movq	%rdi, %r14
+	movq	16(%rsi), %rbx
+	addq	$3, %rbx
+	je	.LBB6_1
+# %bb.2:
+	movl	$1, %esi
+	movq	%rbx, %rdi
+	callq	*__rust_alloc@GOTPCREL(%rip)
+	testq	%rax, %rax
+	jne	.LBB6_3
+# %bb.19:
+	movl	$1, %esi
+	movq	%rbx, %rdi
+	callq	*alloc::alloc::handle_alloc_error@GOTPCREL(%rip)
+	ud2
+
+.LBB6_1:
+	xorl	%ebx, %ebx
+	movl	$1, %eax
+
+.LBB6_3:
+	movq	%rax, (%r14)
+	movq	%rbx, 8(%r14)
+	movq	$0, 16(%r14)
+	movq	16(%r15), %rcx
+	movq	%rcx, 16(%rsp)
+	movups	(%r15), %xmm0
+	movaps	%xmm0, (%rsp)
+	testq	%rax, %rax
+	je	.LBB6_6
+# %bb.4:
+	testq	%rbx, %rbx
+	je	.LBB6_6
+# %bb.5:
+	movl	$1, %edx
+	movq	%rax, %rdi
+	movq	%rbx, %rsi
+	callq	*__rust_dealloc@GOTPCREL(%rip)
+
+.LBB6_6:
+	movq	16(%rsp), %rax
+	movq	%rax, 16(%r14)
+	movaps	(%rsp), %xmm0
+	movups	%xmm0, (%r14)
+	movq	8(%r14), %rsi
+	movq	16(%r14), %rbx
+	movq	%rsi, %rax
+	subq	%rbx, %rax
+	cmpq	$3, %rax
+	jae	.LBB6_7
+# %bb.9:
+	movq	%rbx, %rax
+	addq	$3, %rax
+	jb	.LBB6_16
+# %bb.10:
+	leaq	(%rsi,%rsi), %rcx
+	cmpq	%rax, %rcx
+	cmovaq	%rcx, %rax
+	cmpq	$8, %rax
+	movl	$8, %r15d
+	cmovaq	%rax, %r15
+	testq	%rsi, %rsi
+	je	.LBB6_12
+# %bb.11:
+	movq	(%r14), %rdi
+	testq	%rdi, %rdi
+	je	.LBB6_12
+# %bb.13:
+	movl	$1, %edx
+	movq	%r15, %rcx
+	callq	*__rust_realloc@GOTPCREL(%rip)
+	jmp	.LBB6_14
+
+.LBB6_7:
+	movq	(%r14), %rax
+	jmp	.LBB6_8
+
+.LBB6_12:
+	movl	$1, %esi
+	movq	%r15, %rdi
+	callq	*__rust_alloc@GOTPCREL(%rip)
+
+.LBB6_14:
+	testq	%rax, %rax
+	je	.LBB6_18
+# %bb.15:
+	movq	%rax, (%r14)
+	movq	%r15, 8(%r14)
+
+.LBB6_8:
+	movb	.L__unnamed_2+2(%rip), %cl
+	movb	%cl, 2(%rax,%rbx)
+	movzwl	.L__unnamed_2(%rip), %ecx
+	movw	%cx, (%rax,%rbx)
+	addq	$3, 16(%r14)
+	addq	$32, %rsp
+	popq	%rbx
+	popq	%r14
+	popq	%r15
+	retq
+
+.LBB6_16:
+	callq	*alloc::raw_vec::capacity_overflow@GOTPCREL(%rip)
+# %bb.17:
+	ud2
+
+.LBB6_18:
+	movl	$1, %esi
+	movq	%r15, %rdi
+	callq	*alloc::alloc::handle_alloc_error@GOTPCREL(%rip)
+	ud2
+	movq	%rax, %rbx
+	movq	%r14, %rdi
+	callq	core::ptr::drop_in_place
+	movq	%rbx, %rdi
+	callq	_Unwind_Resume@PLT
+	ud2

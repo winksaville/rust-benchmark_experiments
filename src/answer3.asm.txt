@@ -1,0 +1,161 @@
+<alloc::string::String as playground::AppendBar>::append_bar:
+	pushq	%rbp
+	pushq	%r15
+	pushq	%r14
+	pushq	%r13
+	pushq	%r12
+	pushq	%rbx
+	pushq	%rax
+	movq	%rsi, %r14
+	movq	%rdi, %r15
+	movq	16(%rsi), %r12
+	movq	%r12, %rbx
+	addq	$3, %rbx
+	je	.LBB6_1
+	movl	$1, %esi
+	movq	%rbx, %rdi
+	callq	*__rust_alloc@GOTPCREL(%rip)
+	testq	%rax, %rax
+	je	.LBB6_26
+	movq	%rax, %rdi
+	jmp	.LBB6_5
+
+.LBB6_1:
+	xorl	%ebx, %ebx
+	movl	$1, %edi
+
+.LBB6_5:
+	movq	%rdi, (%r15)
+	movq	%rbx, 8(%r15)
+	movq	$0, 16(%r15)
+	movq	(%r14), %r13
+	cmpq	%r12, %rbx
+	jae	.LBB6_12
+	leaq	(%rbx,%rbx), %rax
+	cmpq	%r12, %rax
+	cmovbeq	%r12, %rax
+	cmpq	$8, %rax
+	movl	$8, %ebp
+	cmovaq	%rax, %rbp
+	testq	%rbx, %rbx
+	je	.LBB6_8
+	testq	%rdi, %rdi
+	je	.LBB6_8
+	movl	$1, %edx
+	movq	%rbx, %rsi
+	movq	%rbp, %rcx
+	callq	*__rust_realloc@GOTPCREL(%rip)
+	jmp	.LBB6_10
+
+.LBB6_8:
+	movl	$1, %esi
+	movq	%rbp, %rdi
+	callq	*__rust_alloc@GOTPCREL(%rip)
+
+.LBB6_10:
+	movq	%rax, %rdi
+	testq	%rax, %rax
+	je	.LBB6_28
+	movq	%rdi, (%r15)
+	movq	%rbp, 8(%r15)
+
+.LBB6_12:
+	movq	%r13, %rsi
+	movq	%r12, %rdx
+	callq	*memcpy@GOTPCREL(%rip)
+	addq	16(%r15), %r12
+	movq	%r12, 16(%r15)
+	movq	8(%r15), %rsi
+	movq	%rsi, %rax
+	subq	%r12, %rax
+	cmpq	$3, %rax
+	jae	.LBB6_13
+	movq	%r12, %rax
+	addq	$3, %rax
+	jb	.LBB6_24
+	leaq	(%rsi,%rsi), %rcx
+	cmpq	%rax, %rcx
+	cmovaq	%rcx, %rax
+	cmpq	$8, %rax
+	movl	$8, %ebx
+	cmovaq	%rax, %rbx
+	testq	%rsi, %rsi
+	je	.LBB6_20
+	movq	(%r15), %rdi
+	testq	%rdi, %rdi
+	je	.LBB6_20
+	movl	$1, %edx
+	movq	%rbx, %rcx
+	callq	*__rust_realloc@GOTPCREL(%rip)
+	jmp	.LBB6_22
+
+.LBB6_13:
+	movq	(%r15), %rax
+	jmp	.LBB6_14
+
+.LBB6_20:
+	movl	$1, %esi
+	movq	%rbx, %rdi
+	callq	*__rust_alloc@GOTPCREL(%rip)
+
+.LBB6_22:
+	testq	%rax, %rax
+	je	.LBB6_26
+	movq	%rax, (%r15)
+	movq	%rbx, 8(%r15)
+
+.LBB6_14:
+	movb	.L__unnamed_2+2(%rip), %cl
+	movb	%cl, 2(%rax,%r12)
+	movzwl	.L__unnamed_2(%rip), %ecx
+	movw	%cx, (%rax,%r12)
+	addq	$3, 16(%r15)
+	movq	(%r14), %rdi
+	testq	%rdi, %rdi
+	je	.LBB6_27
+	movq	8(%r14), %rsi
+	testq	%rsi, %rsi
+	je	.LBB6_27
+	movl	$1, %edx
+	addq	$8, %rsp
+	popq	%rbx
+	popq	%r12
+	popq	%r13
+	popq	%r14
+	popq	%r15
+	popq	%rbp
+	jmpq	*__rust_dealloc@GOTPCREL(%rip)
+
+.LBB6_27:
+	addq	$8, %rsp
+	popq	%rbx
+	popq	%r12
+	popq	%r13
+	popq	%r14
+	popq	%r15
+	popq	%rbp
+	retq
+
+.LBB6_26:
+	movl	$1, %esi
+	movq	%rbx, %rdi
+	callq	*alloc::alloc::handle_alloc_error@GOTPCREL(%rip)
+	ud2
+
+.LBB6_28:
+	movl	$1, %esi
+	movq	%rbp, %rdi
+	callq	*alloc::alloc::handle_alloc_error@GOTPCREL(%rip)
+	ud2
+
+.LBB6_24:
+	callq	*alloc::raw_vec::capacity_overflow@GOTPCREL(%rip)
+	ud2
+	movq	%rax, %rbx
+	movq	%r15, %rdi
+	callq	core::ptr::drop_in_place
+	movq	%r14, %rdi
+	callq	core::ptr::drop_in_place
+	movq	%rbx, %rdi
+	callq	_Unwind_Resume@PLT
+	ud2
